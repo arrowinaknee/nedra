@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Nedra": {
+      "commandName": "Project",
+      "commandLineArgs": "5"
+    }
+  }
+}
