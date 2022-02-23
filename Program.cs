@@ -29,30 +29,6 @@ for(int i = 0; i < size; i++)
 		nodes[i][j] = new(rnd.Next() % 10);
 }
 
-// display the triangle
-for (int i = 0; i < size - 1; i++)
-{
-	// space before the numbers line
-	for (int j = 0; j < (size - i - 1) * 2; j++)
-		Console.Write(" ");
-
-	// numbers with 3 spaces between
-	for (int j = 0; j < i + 1; j++)
-		Console.Write($"{nodes[i][j].Value}   ");
-
-	Console.WriteLine();
-
-	// space before the connections line
-	for (int j = 0; j < (size - i - 1) * 2 - 1; j++)
-		Console.Write(" ");
-	for (int j = 0; j < i + 1; j++)
-		Console.Write("/ \\ ");
-	Console.WriteLine();
-}
-for (int j = 0; j < size; j++)
-	Console.Write($"{nodes[size-1][j].Value}   ");
-Console.WriteLine();
-
 // find maximum possible sum for each node, bottom to top
 var stime = DateTime.Now;
 for(int i = size - 2; i >= 0; i--)
@@ -64,9 +40,60 @@ for(int i = size - 2; i >= 0; i--)
 }
 var etime = DateTime.Now;
 
+// find the path to get the best sum
+int[] path = new int[size];
+path[0] = 0;
+for (int i = 1; i < size; i++)
+{
+	int prev = path[i - 1];
+	if (nodes[i][prev].MaxSum > nodes[i][prev + 1].MaxSum)
+		path[i] = prev;
+	else path[i] = prev + 1;
+}
+
+// display the triangle
+for (int i = 0; i < size - 1; i++)
+{
+	// space before the numbers line
+	for (int j = 0; j < (size - i - 1) * 2; j++)
+		Console.Write(" ");
+
+	// numbers with 3 spaces between
+	for (int j = 0; j < i + 1; j++)
+	{
+		SetConsoleHighlight(path[i] == j);
+		Console.Write($"{nodes[i][j].Value}   ");
+	}
+
+	Console.WriteLine();
+
+	// space before the connections line
+	for (int j = 0; j < (size - i - 1) * 2 - 1; j++)
+		Console.Write(" ");
+	for (int j = 0; j < i + 1; j++)
+	{
+		SetConsoleHighlight(path[i + 1] == j && path[i] == j);
+		Console.Write("/ ");
+		SetConsoleHighlight(path[i + 1] == j + 1 && path[i] == j);
+		Console.Write("\\ ");
+	}
+	Console.WriteLine();
+}
+// last row
+for (int j = 0; j < size; j++)
+{
+	SetConsoleHighlight(path[size - 1] == j);
+	Console.Write($"{nodes[size - 1][j].Value}   ");
+}
+SetConsoleHighlight(false);
+Console.WriteLine();
+
 // display the results
 Console.WriteLine($"Maximum possible sum in the triangle: {nodes[0][0].MaxSum}");
 Console.WriteLine($"Completed in {(etime - stime).TotalMilliseconds}ms");
+
+
+void SetConsoleHighlight(bool doHighlight) => Console.ForegroundColor = doHighlight ? ConsoleColor.Green : ConsoleColor.White;
 
 struct Node
 {
