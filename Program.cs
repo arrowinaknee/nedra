@@ -3,13 +3,17 @@ int size;
 Node[][] nodes;
 Random rnd = new();
 
-// parse triangle size from args
-if(args.Length != 1)
+// parse triangle size from args (if provided)
+if (args.Length == 0)
 {
-	Console.WriteLine("expected 1 argument");
+	size = 5;
+}
+else if (args.Length > 1)
+{
+	Console.WriteLine("expected only 1 argument");
 	return;
 }
-if (!int.TryParse(args[0], out size))
+else if (!int.TryParse(args[0], out size))
 {
 	Console.WriteLine("arg 1 must be a number");
 	return;
