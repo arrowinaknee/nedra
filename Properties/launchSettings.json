@@ -2,7 +2,7 @@
   "profiles": {
     "Nedra": {
       "commandName": "Project",
-      "commandLineArgs": "5"
+      "commandLineArgs": "-range 5-10 -size 10 -nocolor"
     }
   }
 }
